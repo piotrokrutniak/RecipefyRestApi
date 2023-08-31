@@ -80,7 +80,7 @@ router.patch("/:recipeId", (req, res, next) => {
         updateOps[ops.propName] = ops.value
     }
 
-    
+    console.log(updateOps)
 
     Recipe.updateMany({_id: id}, {$set: updateOps})
         .exec()

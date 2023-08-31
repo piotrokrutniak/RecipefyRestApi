@@ -72,25 +72,16 @@ router.get("/:recipeId", (req, res, next) => {
 
 router.patch("/:recipeId", (req, res, next) => {
     const id = req.params.recipeId
-    const data = req.body
 
-    const updateOps = {}
-
-    for (const ops of data){
-        updateOps[ops.propName] = ops.value
-    }
-
-    
-
-    Recipe.updateMany({_id: id}, {$set: updateOps})
+    Recipe.updateOne({_id: id})
         .exec()
             .then(doc => {
-                if(doc){
-                    console.log(doc)
+                console.log(doc)
+                if(doc ){
                     res.status(200).json(doc)
                 }
                 else{
-                    res.status(404).json({message: "No valid entry for update"})
+                    res.status(404).json({message: "No valid entry for deletion"})
                 }
             })
             .catch(err => {
@@ -102,7 +93,7 @@ router.patch("/:recipeId", (req, res, next) => {
 router.delete("/:recipeId", (req, res, next) => {
     const id = req.params.recipeId
 
-    Recipe.deleteMany({_id: id})
+    Recipe.deleteOne({_id: id})
         .exec()
             .then(doc => {
                 console.log(doc)

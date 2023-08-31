@@ -77,7 +77,9 @@ router.patch("/:recipeId", (req, res, next) => {
     const updateOps = {}
 
     for (const ops of data){
+        console.log(ops)
         updateOps[ops.propName] = ops.value
+        console.log(ops.value)
     }
 
     

@@ -72,21 +72,20 @@ router.get("/:recipeId", (req, res, next) => {
 
 router.patch("/:recipeId", (req, res, next) => {
     const id = req.params.recipeId
-    const data = req.body
+    const data = {...data}
 
     const updateOps = {}
 
+    console.log({...data})
     for (const ops of data){
         updateOps[ops.propName] = ops.value
     }
 
-    
-
-    Recipe.updateMany({_id: id}, {$set: updateOps})
+    Recipe.updateOne({_id: id}, {$set: updateOps})
         .exec()
             .then(doc => {
-                if(doc){
-                    console.log(doc)
+                console.log(doc)
+                if(doc ){
                     res.status(200).json(doc)
                 }
                 else{
