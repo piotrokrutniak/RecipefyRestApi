@@ -27,20 +27,19 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const data = req.body
 
-    const recipe = new Recipe({
-        _id: new mongoose.Types.ObjectId(),
+    const recipeSection = {
+        recipeId: data.recipeId,
         title: data.title,
-        summary: data.summary,
-        rating: data.rating,
-        coverImage: data.coverUrl
-    })
+        richText: data.richText,
+        order: data.order
+    }
 
-    recipe.save()
+    recipeSection.save()
         .then(
             result => {
             console.log(result)
             res.status(201).json({
-                message: "New recipe created",
+                message: "New recipe section created",
                 recipeCreated: result
             })
         })

@@ -12,13 +12,13 @@ router.post("/", (req, res, next) => {
 
     const recipeIngredient = {
         recipeId: data.recipeId,
-        ingredientId: data.ingredientId,
-        quantity: data.quantity,
-        measurementUnit: data.measurementUnit
+        title: data.title,
+        richText: data.richText,
+        order: data.order
     }
 
     res.status(201).json({
-        message: "Added new recipe ingredient.",
+        message: "Added new recipe section.",
         createdRecipeIngredient: recipeIngredient
     })
 })

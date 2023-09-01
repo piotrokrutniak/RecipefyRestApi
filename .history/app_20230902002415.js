@@ -7,7 +7,7 @@ const mongoose = require("mongoose")
 const process = require("./nodemon.json")
 
 const recipeRoutes = require("./api/routes/recipes")
-const ingredientRoutes = require("./api/routes/ingredients")
+const ingridientRoutes = require("./api/routes/ingredients")
 
 mongoose.connect('mongodb+srv://piotrokrutniak:' + process.env.MONGO_PW + '@node-rest-recipefy.nzu9cxn.mongodb.net/?retryWrites=true&w=majority')
 
@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 
 // Routes
 app.use("/recipes", recipeRoutes)
-app.use("/ingredients", ingredientRoutes)
+app.use("/ingridientRoutes", ingridientRoutes)
 
 //CORS bypass
 

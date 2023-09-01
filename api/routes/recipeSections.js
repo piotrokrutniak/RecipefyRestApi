@@ -27,20 +27,19 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const data = req.body
 
-    const recipe = new Recipe({
-        _id: new mongoose.Types.ObjectId(),
+    const recipeSection = {
+        recipeId: data.recipeId,
         title: data.title,
-        summary: data.summary,
-        rating: data.rating,
-        coverImage: data.coverUrl
-    })
+        richText: data.richText,
+        order: data.order
+    }
 
-    recipe.save()
+    recipeSection.save()
         .then(
             result => {
             console.log(result)
             res.status(201).json({
-                message: "New recipe created",
+                message: "New recipe section created",
                 recipeCreated: result
             })
         })
@@ -50,8 +49,8 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.get("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.get("/:recipeSectionId", (req, res, next) => {
+    const id = req.params.recipeSectionId
 
     Recipe.findById(id)
         .exec()
@@ -70,8 +69,8 @@ router.get("/:recipeId", (req, res, next) => {
         })
 })
 
-router.patch("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.patch("/:recipeSectionId", (req, res, next) => {
+    const id = req.params.recipeSectionId
     const data = req.body
 
     const updateOps = {}
@@ -99,8 +98,8 @@ router.patch("/:recipeId", (req, res, next) => {
             })
 })
 
-router.delete("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.delete("/:recipeSectionId", (req, res, next) => {
+    const id = req.params.recipeSectionId
 
     Recipe.deleteMany({_id: id})
         .exec()

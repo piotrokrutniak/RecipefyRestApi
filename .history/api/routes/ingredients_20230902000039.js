@@ -2,15 +2,12 @@ const express = require("express");
 const router = express.Router()
 const mongoose = require("mongoose")
 
-const Recipe = require("../models/recipe")
+const Ingredient = require("../models/ingredient")
 
 
 
 router.get("/", (req, res, next) => {
-
-    
-
-    Recipe.find()
+    Ingredient.find()
         .limit(req.body.limit ?? 10)
         .skip(req.body.skip ?? 0)
         .exec()
@@ -27,21 +24,20 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const data = req.body
 
-    const recipe = new Recipe({
+    const ingredient = new Ingredient({
         _id: new mongoose.Types.ObjectId(),
-        title: data.title,
-        summary: data.summary,
-        rating: data.rating,
-        coverImage: data.coverUrl
+        name: data.title,
+        vegan: data.summary,
+        vegetarian: data.rating,
     })
 
-    recipe.save()
+    ingredient.save()
         .then(
             result => {
             console.log(result)
             res.status(201).json({
-                message: "New recipe created",
-                recipeCreated: result
+                message: "New ingredient created",
+                ingredientCreated: result
             })
         })
         .catch(err => {
@@ -50,10 +46,10 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.get("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.get("/:ingredientId", (req, res, next) => {
+    const id = req.params.ingredientId
 
-    Recipe.findById(id)
+    Ingredient.findById(id)
         .exec()
         .then(doc => {
             console.log(doc)
@@ -70,8 +66,8 @@ router.get("/:recipeId", (req, res, next) => {
         })
 })
 
-router.patch("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.patch("/:ingredientId", (req, res, next) => {
+    const id = req.params.ingredientId
     const data = req.body
 
     const updateOps = {}
@@ -80,9 +76,7 @@ router.patch("/:recipeId", (req, res, next) => {
         updateOps[ops.propName] = ops.value
     }
 
-    
-
-    Recipe.updateMany({_id: id}, {$set: updateOps})
+    Ingredient.updateMany({_id: id}, {$set: updateOps})
         .exec()
             .then(doc => {
                 if(doc){
@@ -99,10 +93,10 @@ router.patch("/:recipeId", (req, res, next) => {
             })
 })
 
-router.delete("/:recipeId", (req, res, next) => {
-    const id = req.params.recipeId
+router.delete("/:ingredientId", (req, res, next) => {
+    const id = req.params.ingredientId
 
-    Recipe.deleteMany({_id: id})
+    Ingredient.deleteMany({_id: id})
         .exec()
             .then(doc => {
                 console.log(doc)
