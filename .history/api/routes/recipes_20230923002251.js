@@ -28,8 +28,8 @@ router.post("/", (req, res, next) => {
         title: data.title,
         summary: data.summary,
         rating: data.rating,
-        coverImage: data.coverImage,
-        active: data.active,
+        coverImage: "",
+        published: data.published,
         publishedDate: data.publishedDate
     })
 

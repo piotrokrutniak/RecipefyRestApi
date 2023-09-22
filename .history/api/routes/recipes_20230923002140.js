@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router()
 const mongoose = require("mongoose")
+const cloudinary = require("cloudinary")
 
 const Recipe = require("../models/recipe")
+
+cloudinary.config({ 
+    cloud_name: 'recipefy', 
+    api_key: '955791326567249', 
+    api_secret: 'eov9GtpMryz7RyDxklsEfrcX6V4' 
+  });
 
 router.get("/", (req, res, next) => {
     Recipe.find()
@@ -28,8 +35,8 @@ router.post("/", (req, res, next) => {
         title: data.title,
         summary: data.summary,
         rating: data.rating,
-        coverImage: data.coverImage,
-        active: data.active,
+        coverImage: "",
+        published: data.published,
         publishedDate: data.publishedDate
     })
 

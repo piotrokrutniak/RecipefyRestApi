@@ -11,14 +11,16 @@ router.get("/", (req, res, next) => {
 })
 
 router.post("/", (req, res, next) => {
-    const ingredients = req.body
+    const data = req.body
 
-    for (const ingredient of ingredients){
+    
+
+    for (const recipe of data){
         const recipeIngredient = new RecipeIngredient({
             _id: new mongoose.Types.ObjectId(),
-            recipeId: new mongoose.Types.ObjectId(ingredient.recipeId),
-            ingredientId: new mongoose.Types.ObjectId(ingredient.ingredientId),
-            desc: ingredient.desc
+            recipeId: new mongoose.Types.ObjectId(recipe.recipeId),
+            ingredientId: new mongoose.Types.ObjectId(recipe.ingredientId),
+            desc: recipe.desc
         })
 
         recipeIngredient.save()

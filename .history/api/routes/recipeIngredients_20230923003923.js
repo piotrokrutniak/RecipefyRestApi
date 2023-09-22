@@ -13,6 +13,8 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const ingredients = req.body
 
+    
+
     for (const ingredient of ingredients){
         const recipeIngredient = new RecipeIngredient({
             _id: new mongoose.Types.ObjectId(),
