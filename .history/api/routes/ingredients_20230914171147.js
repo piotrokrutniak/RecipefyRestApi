@@ -48,9 +48,9 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.post("/byName/", (req, res, next) => {
+router.get("/byName/:wildcard", (req, res, next) => {
 
-    const wildcard = req.body.wildcard ?? ""
+    const wildcard = req.body.wildcard
 
     Ingredient.find({"name" : {$regex : wildcard, $options: 'i'}})
         .exec()
@@ -69,7 +69,7 @@ router.post("/byName/", (req, res, next) => {
         })
 })
 
-router.get("/byId/:ingredientId", (req, res, next) => {
+router.get("/:ingredientId", (req, res, next) => {
     const id = req.params.ingredientId
 
     Ingredient.findById(id)

@@ -18,8 +18,8 @@ router.post("/", (req, res, next) => {
     for (const recipe of data.recipeIngredients){
         const recipeIngredient = new RecipeIngredient({
             _id: new mongoose.Types.ObjectId(),
-            recipeId: new mongoose.Types.ObjectId(recipe.recipeId),
-            ingredientId: new mongoose.Types.ObjectId(recipe.ingredientId),
+            recipeId: recipe.recipeId,
+            ingredientId: recipe.ingredientId,
             desc: recipe.desc
         })
 

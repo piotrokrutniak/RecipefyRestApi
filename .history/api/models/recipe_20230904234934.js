@@ -6,9 +6,7 @@ const recipeSchema = mongoose.Schema({
         summary: String,
         preparationTime: Number,
         rating: Number,
-        coverImage: String,
-        published: Boolean,
-        publishedDate: Date
+        coverImage: String
 });
 
 module.exports = mongoose.model('Recipe', recipeSchema)

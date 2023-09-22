@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router()
+const mongoose = require("mongoose")
+
+const RecipeIngredient = require("../models/recipeIngredient");
 
 router.get("/", (req, res, next) => {
     res.status(200).json({
@@ -10,10 +13,29 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
     const data = req.body
 
-    const recipeIngredient = {
-        recipeId: data.recipeId,
-        ingredientId: data.ingredientId,
-        amount: data.ingredientId,
+    
+
+    for (const recipe of data){
+        const recipeIngredient = new RecipeIngredient({
+            _id: new mongoose.Types.ObjectId(),
+            recipeId: recipe.recipeId,
+            ingredientId: recipe.ingredientId,
+            desc: recipe.desc
+        })
+
+        recipeIngredient.save()
+        .then(
+            result => {
+            console.log(result)
+            res.status(201).json({
+                message: "New recipe ingredient added",
+                ingredientCreated: result
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({error: err})
+        })
     }
 
     res.status(201).json({
@@ -46,9 +68,4 @@ router.delete("/:recipeIngredientId", (req, res, next) => {
     })
 })
 
-
-
-
-
-
-module.exports = router 
+module.exports = router

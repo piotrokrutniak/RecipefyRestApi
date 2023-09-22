@@ -9,7 +9,6 @@ const process = require("./nodemon.json")
 
 const recipeRoutes = require("./api/routes/recipes")
 const ingredientRoutes = require("./api/routes/ingredients")
-const recipeIngredientRoutes = require("./api/routes/recipeIngredients")
 
 mongoose.connect('mongodb+srv://piotrokrutniak:' + process.env.MONGO_PW + '@node-rest-recipefy.nzu9cxn.mongodb.net/?retryWrites=true&w=majority')
 
@@ -20,7 +19,7 @@ app.use(bodyParser.json())
 // Routes
 app.use("/recipes", cors(), recipeRoutes) // use cors middleware for recipes route
 app.use("/ingredients", cors(), ingredientRoutes) // use cors middleware for ingredients route
-app.use("/recipeIngredients", cors(), recipeIngredientRoutes) // use cors middleware for ingredients route
+app.use("/recipeIngredients", cors(), ingredientRoutes) 
 
 // Handling wrong endpoints
 app.use((req, res, next) => {

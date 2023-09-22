@@ -1,18 +1,20 @@
 const express = require("express");
 const router = express.Router()
 const mongoose = require("mongoose")
+const cloudinary = require("cloudinary")
 
-const Ingredient = require("../models/ingredient")
+const Recipe = require("../models/recipe")
 
 
 
 router.get("/", (req, res, next) => {
-    Ingredient.find()
+    Recipe.find()
         .limit(req.body.limit ?? 10)
         .skip(req.body.skip ?? 0)
         .exec()
         .then(doc => {
-            console.log(doc)
+            //console.log(doc)
+            console.log(req.headers)
             res.status(200).json(doc)
         })
         .catch(err => {
@@ -23,23 +25,27 @@ router.get("/", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
     const data = req.body
+    console.log(data.imageFile)
+    cloudinary.v2.uploader.upload(data.imageFile)
+        .catch(x => console.log(x))
 
-    const ingredient = new Ingredient({
+
+    const recipe = new Recipe({
         _id: new mongoose.Types.ObjectId(),
-        name: data.name,
-        vegan: data.vegan,
-        vegetarian: data.vegetarian,
+        title: data.title,
+        summary: data.summary,
+        rating: data.rating,
+        coverImage: ""
     })
 
-    console.log(data)
 
-    ingredient.save()
+    recipe.save()
         .then(
             result => {
             console.log(result)
             res.status(201).json({
-                message: "New ingredient created",
-                ingredientCreated: result
+                message: "New recipe created",
+                recipeCreated: result
             })
         })
         .catch(err => {
@@ -48,11 +54,10 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.post("/byName/", (req, res, next) => {
+router.get("/:recipeId", (req, res, next) => {
+    const id = req.params.recipeId
 
-    const wildcard = req.body.wildcard ?? ""
-
-    Ingredient.find({"name" : {$regex : wildcard, $options: 'i'}})
+    Recipe.findById(id)
         .exec()
         .then(doc => {
             console.log(doc)
@@ -69,28 +74,8 @@ router.post("/byName/", (req, res, next) => {
         })
 })
 
-router.get("/byId/:ingredientId", (req, res, next) => {
-    const id = req.params.ingredientId
-
-    Ingredient.findById(id)
-        .exec()
-        .then(doc => {
-            console.log(doc)
-            if(doc){
-                res.status(200).json(doc)
-            }
-            else{
-                res.status(404).json({message: "No valid entry"})
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({error: err})
-        })
-})
-
-router.patch("/:ingredientId", (req, res, next) => {
-    const id = req.params.ingredientId
+router.patch("/:recipeId", (req, res, next) => {
+    const id = req.params.recipeId
     const data = req.body
 
     const updateOps = {}
@@ -99,7 +84,9 @@ router.patch("/:ingredientId", (req, res, next) => {
         updateOps[ops.propName] = ops.value
     }
 
-    Ingredient.updateMany({_id: id}, {$set: updateOps})
+    
+
+    Recipe.updateMany({_id: id}, {$set: updateOps})
         .exec()
             .then(doc => {
                 if(doc){
@@ -116,10 +103,10 @@ router.patch("/:ingredientId", (req, res, next) => {
             })
 })
 
-router.delete("/:ingredientId", (req, res, next) => {
-    const id = req.params.ingredientId
+router.delete("/:recipeId", (req, res, next) => {
+    const id = req.params.recipeId
 
-    Ingredient.deleteMany({_id: id})
+    Recipe.deleteMany({_id: id})
         .exec()
             .then(doc => {
                 console.log(doc)

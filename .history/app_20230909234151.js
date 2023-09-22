@@ -3,24 +3,40 @@ const app = express()
 const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
-const cors = require("cors") // import cors module
+const cors = require("cors")
 
 const process = require("./nodemon.json")
 
 const recipeRoutes = require("./api/routes/recipes")
 const ingredientRoutes = require("./api/routes/ingredients")
-const recipeIngredientRoutes = require("./api/routes/recipeIngredients")
 
 mongoose.connect('mongodb+srv://piotrokrutniak:' + process.env.MONGO_PW + '@node-rest-recipefy.nzu9cxn.mongodb.net/?retryWrites=true&w=majority')
 
 app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.use(cors({
+    origin: ["*"]
+}))
 
 // Routes
-app.use("/recipes", cors(), recipeRoutes) // use cors middleware for recipes route
-app.use("/ingredients", cors(), ingredientRoutes) // use cors middleware for ingredients route
-app.use("/recipeIngredients", cors(), recipeIngredientRoutes) // use cors middleware for ingredients route
+app.use("/recipes", recipeRoutes)
+app.use("/ingredients", ingredientRoutes)
+
+//CORS bypass
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers", 
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+        );
+
+    if (req.method === 'OPTIONS'){
+        res.header("Access-control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET") 
+        return res.status(200)
+    }
+})
 
 // Handling wrong endpoints
 app.use((req, res, next) => {

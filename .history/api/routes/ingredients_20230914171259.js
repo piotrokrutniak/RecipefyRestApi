@@ -48,7 +48,7 @@ router.post("/", (req, res, next) => {
         })
 })
 
-router.post("/byName/", (req, res, next) => {
+router.get("/byName/", (req, res, next) => {
 
     const wildcard = req.body.wildcard ?? ""
 
@@ -69,7 +69,7 @@ router.post("/byName/", (req, res, next) => {
         })
 })
 
-router.get("/byId/:ingredientId", (req, res, next) => {
+router.get("/:ingredientId", (req, res, next) => {
     const id = req.params.ingredientId
 
     Ingredient.findById(id)
