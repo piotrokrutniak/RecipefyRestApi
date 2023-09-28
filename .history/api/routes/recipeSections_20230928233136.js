@@ -30,7 +30,7 @@ router.post("/", (req, res, next) => {
             recipeId: new mongoose.Types.ObjectId(section.recipeId),
             title: section.title,
             richText: section.richText,
-            order: section.order ?? 0
+            order: section.order
         })
 
         recipeSection.save()
