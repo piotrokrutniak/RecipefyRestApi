@@ -23,9 +23,10 @@ router.get("/", (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     const data = req.body
+    const results = []
     const errors = []
 
-    const savePromises = data.map(async (section) => {
+    for await (const section of data){
         const recipeSection = new RecipeSection({
             _id: new mongoose.Types.ObjectId(),
             recipeId: new mongoose.Types.ObjectId(section.recipeId),
@@ -34,16 +35,22 @@ router.post("/", async (req, res, next) => {
             order: section.order ?? 0
         })
 
-        return recipeSection.save()
-    })
-
-    const results = await Promise.all(savePromises)
+        recipeSection.save()
+        .then(
+            result => {
+                results.push(result)
+        })
+        .catch(err => {
+            console.log(err)
+            errors.push(err)
+        })
+    }
 
     if(results.length > 0){
         return res.status(201).json({
             message: "New recipe sections created.",
             recipeSectionsCreated: results,
-            errors: errors ?? ""
+            error: errors ?? ""
         })
     }
 

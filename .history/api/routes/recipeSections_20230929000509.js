@@ -43,7 +43,7 @@ router.post("/", async (req, res, next) => {
         return res.status(201).json({
             message: "New recipe sections created.",
             recipeSectionsCreated: results,
-            errors: errors ?? ""
+            error: errors ?? ""
         })
     }
 

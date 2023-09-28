@@ -23,6 +23,7 @@ router.get("/", (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     const data = req.body
+    const results = []
     const errors = []
 
     const savePromises = data.map(async (section) => {
@@ -37,13 +38,13 @@ router.post("/", async (req, res, next) => {
         return recipeSection.save()
     })
 
-    const results = await Promise.all(savePromises)
+    results = await Promise.all(savePromises)
 
     if(results.length > 0){
         return res.status(201).json({
             message: "New recipe sections created.",
             recipeSectionsCreated: results,
-            errors: errors ?? ""
+            error: errors ?? ""
         })
     }
 
